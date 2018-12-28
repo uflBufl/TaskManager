@@ -119,6 +119,8 @@ public class Server implements Runnable {
 //                        out.flush();
                         break;
                     }
+
+                    //Зачем я делаю через currentTree?!!??!?!?! Возможно в этом ошибка. Проверить!!
                     case 6:{
                         currentTree = trees.getTreeById(in.readInt());
                         int id = in.readInt();
@@ -163,7 +165,7 @@ public class Server implements Runnable {
                         break;
                     }
                     case 10:{
-                        try (OutputStream output = new FileOutputStream("3.txt")) {
+                        try (OutputStream output = new FileOutputStream("2.bin")) {
 //                        try (FileWriter output = new FileWriter("3.txt")) {
 //                            Gson gson = new GsonBuilder()
 //                                    .setPrettyPrinting()
@@ -184,6 +186,19 @@ public class Server implements Runnable {
                         for (Tree tree:trees.getTrees()) {
                             tree.showTree();
                         }
+
+                        try (InputStream input = new FileInputStream(treeName)) {
+
+                            currentTree = null;
+
+                            trees = deserialaizeTrees(input);
+                            input.close();
+
+                        } catch (Exception e) {
+                            System.out.print(e.getMessage());
+                        }
+
+
                         serializeTrees(out,trees);
                         out.flush();
                         break;

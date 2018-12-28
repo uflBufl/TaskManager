@@ -22,10 +22,20 @@ public class MainForm extends JFrame  {
     private JTextField nodeName;
     private JTextField nodeId;
     private JButton cloneTreeButton;
+    private JButton saveDataButton;
+    private JButton loadDataButton;
 
     public void createTree(String nodeName, String treeName){
         this.client.createTree(nodeName, treeName);
-        trees = client.getData();
+//        trees = client.getData();
+
+        if(treeName.replaceAll(" ","").equals("")){
+            trees.createTree(nodeName);
+        }
+        else {
+            trees.createTree(nodeName, treeName);
+        }
+
         setDefaultTree();
     }
 
@@ -35,9 +45,14 @@ public class MainForm extends JFrame  {
         if(trees.getTreeById(treeId)!=null) {
 
             client.deleteTreeById(treeId);
-            trees = client.getData();
+//            trees = client.getData();
+
+
+                trees.deleteTreeById(treeId);
+
+
         }
-//        else System.out.println("Дерева с таким id нет");
+        else System.out.println("Дерева с таким id нет");
 
 
 //        this.client.createTree(nodeName, treeName);
@@ -47,13 +62,30 @@ public class MainForm extends JFrame  {
 
     public void newNode(String nodeName){
         this.client.newNode(treeId, Integer.parseInt(nodeId.getText()),nodeName);
-        trees = client.getData();
+//        trees = client.getData();
+
+        if (nodeName.replaceAll(" ", "").equals("")) {
+            trees.getTreeById(treeId).newNode(Integer.parseInt(nodeId.getText()));
+            //                                node = new Node(id);
+        } else {
+            trees.getTreeById(treeId).newNode(Integer.parseInt(nodeId.getText()), nodeName);
+            //                                node = new Node(id, name);
+        }
+
         setDefaultTree();
     }
 
     public void deleteNode(){
         this.client.deleteNode(treeId,Integer.parseInt(nodeId.getText()));
-        trees = client.getData();
+//        trees = client.getData();
+
+        if(trees.getTreeById(treeId).getNodeById(Integer.parseInt(nodeId.getText()))!=null){
+            trees.getTreeById(treeId).deleteNodeById(Integer.parseInt(nodeId.getText()));
+        }
+        else{
+            System.out.println("Узла с таким id нет");
+        }
+
         setDefaultTree();
     }
 
@@ -61,7 +93,15 @@ public class MainForm extends JFrame  {
         System.out.println(2);
         this.client.splitTree(treeId,Integer.parseInt(nodeId.getText()));
         System.out.println(3);
-        trees = client.getData();
+        //trees = client.getData();
+
+        if(trees.getTreeById(treeId).getNodeById(Integer.parseInt(nodeId.getText()))!=null){
+            trees.getTreeById(treeId).splitTree(Integer.parseInt(nodeId.getText()));
+        }
+        else{
+            System.out.println("Узла с таким id нет");
+        }
+
         System.out.println(4);
         setDefaultTree();
         System.out.println(5);
@@ -69,7 +109,24 @@ public class MainForm extends JFrame  {
 
     public void cloneTree(){
         this.client.cloneTree(treeId);
-        trees = client.getData();
+//        trees = client.getData();
+
+        if(trees.getTreeById(treeId) != null){
+            trees.cloneTree(treeId);
+        }
+        else{
+            System.out.println("Дерево не выбрано");
+        }
+
+        setDefaultTree();
+    }
+
+    public void saveData(){
+        this.client.saveData();
+    }
+
+    public void loadData(){
+        this.client.getData();
         setDefaultTree();
     }
 
@@ -194,6 +251,14 @@ createTreeButton.addActionListener(e -> {
 
         cloneTreeButton.addActionListener(e -> {
             cloneTree();
+        });
+
+        saveDataButton.addActionListener(e -> {
+            saveData();
+        });
+
+        loadDataButton.addActionListener(e -> {
+            loadData();
         });
 
         ActionListener fileActionListener = event -> {
