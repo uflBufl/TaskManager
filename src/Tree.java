@@ -67,13 +67,27 @@ class Node implements Serializable, Cloneable {
         return cloneNode;
     }
 
-//    public String parseToJSON(){
+    public void parseToJSON(StringBuffer bf){
 //        StringBuffer bf = new StringBuffer();
-//
-//
-//
+bf.append("{ \"NodeID\": \"");
+bf.append(id);
+bf.append("\", \"NodeName\": \"");
+bf.append(name);
+bf.append("\"");
+if(!children.isEmpty()){
+    bf.append(", ");
+    for (Node child:children) {
+        child.parseToJSON(bf);
+    }
+}
+bf.append(" }");
+
+
+
+
 //        return bf.toString();
-//    }
+    }
+
 
 }
 

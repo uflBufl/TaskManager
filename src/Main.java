@@ -36,6 +36,14 @@ public class Main {
         trees.getTreeById(1).newNode(0,"Сделать ТИ");
         trees.getTreeById(1).newNode(0,"Поесть");
         trees.getTreeById(1).showTree();
+
+        StringBuffer bf = new StringBuffer();
+
+
+        //Преоверить parseToJSON
+        trees.getTreeById(0).getHead().parseToJSON(bf);
+        System.out.println(bf);
+
 //        tree.deleteTree();
 //        System.out.println(tree.getHead() == null);
 
@@ -46,8 +54,10 @@ public class Main {
 
 
         //МЭИН ФОРМ!!!
-        MainForm mf = new MainForm();
-        mf.start();
+//        MainForm mf = new MainForm();
+//        mf.start();
+
+
 
 
 //Проверка копирования
