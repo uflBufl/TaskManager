@@ -22,15 +22,15 @@ public class Client {
 Trees trees = new Trees();
 
         try {
-            out.write(11);
+            out.writeObject(Action.LOAD);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            trees = deserialaizeTrees(in);
-//            trees = (Trees)in.readObject();
+            Serialization s = new Serialization();
+            trees = s.deserialaizeTrees(in);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -42,10 +42,9 @@ trees.getTreeById(0).showTree();
     }
 
     public void newNode(int currentTreeID, int id, String name){
-//        Tree tree = new Tree();
 
         try {
-            out.write(5);
+            out.writeObject(Action.CREATENODE);
             out.writeInt(currentTreeID);
             out.writeInt(id);
             out.writeUTF(name);
@@ -53,21 +52,11 @@ trees.getTreeById(0).showTree();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        try{
-//        tree = (Tree)in.readObject();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
-//        return tree;
     }
 
     public void deleteNode(int currentTreeID, int id){
         try {
-            out.write(6);
+            out.writeObject(Action.DELETENODE);
             out.writeInt(currentTreeID);
             out.writeInt(id);
             out.flush();
@@ -78,7 +67,7 @@ trees.getTreeById(0).showTree();
 
     public void splitTree(int currentTreeID, int id){
         try {
-            out.write(7);
+            out.writeObject(Action.SPLITTREE);
             out.writeInt(currentTreeID);
             out.writeInt(id);
             out.flush();
@@ -89,7 +78,7 @@ trees.getTreeById(0).showTree();
 
     public void cloneTree(int currentTreeID){
         try {
-            out.write(8);
+            out.writeObject(Action.CLONETREE);
             out.writeInt(currentTreeID);
             out.flush();
         } catch (IOException e) {
@@ -98,7 +87,7 @@ trees.getTreeById(0).showTree();
     }
     public void saveData(){
         try {
-            out.write(10);
+            out.writeObject(Action.SAVE);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,7 +96,7 @@ trees.getTreeById(0).showTree();
 
     public void createTree(String nodeName, String treeName){
         try {
-            out.write(1);
+            out.writeObject(Action.CREATETREE);
             out.writeUTF(nodeName);
             out.writeUTF(treeName);
             out.flush();
@@ -118,21 +107,11 @@ trees.getTreeById(0).showTree();
 
     public void deleteTreeById(int id){
         try {
-            out.write(3);
+            out.writeObject(Action.DELETETREE);
             out.writeInt(id);
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public static void serializeTrees (OutputStream out, Trees trees) throws IOException {
-        (new ObjectOutputStream(out)).writeObject(trees);
-    }
-
-    public static Trees deserialaizeTrees (InputStream in) throws IOException, ClassNotFoundException {
-        return (Trees) (new ObjectInputStream(in)).readObject();
-    }
-
-
 }

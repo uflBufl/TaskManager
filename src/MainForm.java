@@ -27,7 +27,6 @@ public class MainForm extends JFrame  {
 
     public void createTree(String nodeName, String treeName){
         this.client.createTree(nodeName, treeName);
-//        trees = client.getData();
 
         if(treeName.replaceAll(" ","").equals("")){
             trees.createTree(nodeName);
@@ -40,12 +39,9 @@ public class MainForm extends JFrame  {
     }
 
     public void deleteTree(){
-//        System.out.println("Введите id дерева");
-//        int id = in.nextInt();
         if(trees.getTreeById(treeId)!=null) {
 
             client.deleteTreeById(treeId);
-//            trees = client.getData();
 
 
                 trees.deleteTreeById(treeId);
@@ -54,22 +50,16 @@ public class MainForm extends JFrame  {
         }
         else System.out.println("Дерева с таким id нет");
 
-
-//        this.client.createTree(nodeName, treeName);
-//        trees = client.getData();
         setDefaultTree();
     }
 
     public void newNode(String nodeName){
         this.client.newNode(treeId, Integer.parseInt(nodeId.getText()),nodeName);
-//        trees = client.getData();
 
         if (nodeName.replaceAll(" ", "").equals("")) {
             trees.getTreeById(treeId).newNode(Integer.parseInt(nodeId.getText()));
-            //                                node = new Node(id);
         } else {
             trees.getTreeById(treeId).newNode(Integer.parseInt(nodeId.getText()), nodeName);
-            //                                node = new Node(id, name);
         }
 
         setDefaultTree();
@@ -93,7 +83,6 @@ public class MainForm extends JFrame  {
         System.out.println(2);
         this.client.splitTree(treeId,Integer.parseInt(nodeId.getText()));
         System.out.println(3);
-        //trees = client.getData();
 
         if(trees.getTreeById(treeId).getNodeById(Integer.parseInt(nodeId.getText()))!=null){
             trees.getTreeById(treeId).splitTree(Integer.parseInt(nodeId.getText()));
@@ -109,7 +98,6 @@ public class MainForm extends JFrame  {
 
     public void cloneTree(){
         this.client.cloneTree(treeId);
-//        trees = client.getData();
 
         if(trees.getTreeById(treeId) != null){
             trees.cloneTree(treeId);
@@ -142,11 +130,6 @@ public class MainForm extends JFrame  {
         else{
             next.setAllowsChildren(false);
         }
-
-//        DefaultMutableTreeNode newNode = new DefaultMutableTreeNode("Id:"+node.id);
-//if(node.children != null){
-//
-//}
     }
 
     /**
@@ -162,26 +145,12 @@ public class MainForm extends JFrame  {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode("Id:" + tree.getTreeId());
             node.setUserObject(tree);
             root.add(node);
-//            if (tree.getHead() != null) {
                 DefaultMutableTreeNode head = new DefaultMutableTreeNode("Id:" + tree.getHead().id);
                 head.setUserObject(tree.getHead());
                 node.add(head);
 
                 setChildNodes(tree.getHead(), head);
-//            }
         }
-
-//        for (int i = 0; i < trees.getTrees().size(); i++){
-//            // Содержимое корневого узла
-//            DefaultMutableTreeNode folder = new DefaultMutableTreeNode("Узел" + i);
-//            root.add(folder);
-//            for (int j = 1; j < 7; j++){
-//                // Содержимое папок корневого узла
-//                DefaultMutableTreeNode leaf = new DefaultMutableTreeNode("Лист" + j);
-////                leaf.setAllowsChildren(false);
-//                folder.add(leaf);
-//            }
-//        }
         DefaultTreeModel model = new DefaultTreeModel(root, true);
         tree1.setModel(model);
     }
@@ -211,7 +180,6 @@ DefaultMutableTreeNode d = new DefaultMutableTreeNode();
               whatIsSelected = 2;
               Node selectedNode = ((Node) ((DefaultMutableTreeNode) event.getPath().getLastPathComponent()).getUserObject());
               treeId = ((Tree)((DefaultMutableTreeNode)event.getPath().getPathComponent(1)).getUserObject()).getTreeId();
-//              System.out.println(treeId);
               nodeName.setText(selectedNode.name);
               nodeId.setText(Integer.toString(selectedNode.id));
           }
@@ -263,15 +231,6 @@ createTreeButton.addActionListener(e -> {
 
         ActionListener fileActionListener = event -> {
             Trees trees = new Trees();
-//            switch (event.getActionCommand()) {
-//                case "Open tasks":
-//                    trees = Buildings.TypeOfBuilding.DWELLING;
-//                    Buildings.setBuildingFactory(new DwellingFactory());
-//                    break;
-//                default:
-//                    trees = null;
-//                    break;
-//            }
 
             JFileChooser openedFile = new JFileChooser();
             openedFile.setCurrentDirectory(new File("C:\\Users\\gamer\\Desktop\\Учёба\\NetCracker\\лабораторные куратора\\1 лаба"));
@@ -279,88 +238,18 @@ createTreeButton.addActionListener(e -> {
             if (result == JFileChooser.APPROVE_OPTION) {
                 try (InputStream input = new FileInputStream(openedFile.getSelectedFile())) {
                     currentTree = null;
-
-                    trees = deserialaizeTrees(input);
-//                    input.close();
-
-//                    initFrames(Buildings.readBuilding(fileReader), type);
+Serialization s = new Serialization();
+                    trees = s.deserialaizeTrees(input);
                 } catch (Exception exception) {
                     JOptionPane.showMessageDialog(MainForm.this, exception);
                 }
             }
         };
 
-
-
-
-//        JMenuBar menuBar = new JMenuBar();
-//
-//        JMenu fileMenu = new JMenu("File");
-//        JMenu themeMenu = new JMenu("Look & Feel");
-//
-//        JMenuItem itm = new JMenuItem("Open tasks");
-//        itm.addActionListener(fileActionListener);
-//        fileMenu.add(itm;
-
-//textArea1.setSize(100, 100);
-//textArea1.setVisible(true);
-
         setTitle("NetCracker");
         setContentPane(JPanel);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(1300, 700);
         setVisible(true);
-    }
-
-
-
-
-//    private void initTasks(){
-////        System.out.println(building);
-//        if(trees == null) {
-////            for (Tree tree:trees.getTrees()) {
-////                tree.showTree();
-////            }
-//            textArea1.setText(
-//                    "This is Tree:" + "\n");
-//        }
-//        else{
-//            textArea1.setText(
-//                    "This is no Tree:" +"\n");
-//        }
-//        setInfo(building, 1, 1);
-//        Floor[] floors = building.getFloors();
-//
-//        for (int i = 0; i < floors.length; i++) {
-//            JPanel floorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//            floorPanel.setBorder(BorderFactory.createTitledBorder("Floor " + i));
-//            Space[] spaces = floors[i].getSpaces();
-//            for (int j = 0; j < spaces.length; j++) {
-//                JButton button = new JButton(j + "");
-//                int finalI = i+1;
-//                int finalJ = j+1;
-//                button.addActionListener(e -> setInfo(building, finalI, finalJ));
-//                floorPanel.add(button);
-//            }
-//            floorPanel.setPreferredSize(floorPanel.getPreferredSize());
-//            buildingSchema.add(floorPanel);
-//        }
-//        SwingUtilities.updateComponentTreeUI(MainForm.this.getContentPane());
-//    }
-
-
-
-
-
-
-
-
-
-    public void serializeTrees (OutputStream out) throws IOException {
-        (new ObjectOutputStream(out)).writeObject(trees);
-    }
-
-    public Trees deserialaizeTrees (InputStream in) throws IOException, ClassNotFoundException {
-        return (Trees) (new ObjectInputStream(in)).readObject();
     }
 }

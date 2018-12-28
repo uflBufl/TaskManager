@@ -1,3 +1,7 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -40,9 +44,19 @@ public class Main {
         StringBuffer bf = new StringBuffer();
 
 
+        //Преоверить ObjectMapper
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            objectMapper.writeValue(new File("tree.json"), trees.getTreeById(0));
+//        }
+//        catch (Exception e){
+//
+//        }
+
+
         //Преоверить parseToJSON
-        trees.getTreeById(0).getHead().parseToJSON(bf);
-        System.out.println(bf);
+//        trees.getTreeById(0).getHead().parseToJSON(bf);
+//        System.out.println(bf);
 
 //        tree.deleteTree();
 //        System.out.println(tree.getHead() == null);
@@ -54,8 +68,8 @@ public class Main {
 
 
         //МЭИН ФОРМ!!!
-//        MainForm mf = new MainForm();
-//        mf.start();
+        MainForm mf = new MainForm();
+        mf.start();
 
 
 

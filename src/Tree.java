@@ -1,9 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
-
-//jackson для сохранения
-//интерфейс, сохранение и загрузка, создание нового нода.
 class Node implements Serializable, Cloneable {
     int id;
     Node parent;
@@ -35,23 +32,7 @@ class Node implements Serializable, Cloneable {
         this.id = id;
         this.name = name;
         this.parent = parent;
-//        for (Node child:children
-//             ) {
-//            Node childClone = child.clone();
-//
-//            childClone.parent = cloneNode;
-//            this.children.add(childClone);
-//        }
         this.children.addAll(children);
-
-//if(this.children.size() != 0){
-//
-//}
-
-//        for (int i = 0; i < children.size(); i++) {
-//            this.children.add(children.get(i));
-//        }
-//        this.children = children;
     }
 
     //Клонирование Node, без изменения parent
@@ -67,26 +48,26 @@ class Node implements Serializable, Cloneable {
         return cloneNode;
     }
 
-    public void parseToJSON(StringBuffer bf){
-//        StringBuffer bf = new StringBuffer();
-bf.append("{ \"NodeID\": \"");
-bf.append(id);
-bf.append("\", \"NodeName\": \"");
-bf.append(name);
-bf.append("\"");
-if(!children.isEmpty()){
-    bf.append(", ");
-    for (Node child:children) {
-        child.parseToJSON(bf);
-    }
-}
-bf.append(" }");
-
-
-
-
-//        return bf.toString();
-    }
+//    public void parseToJSON(StringBuffer bf){
+////        StringBuffer bf = new StringBuffer();
+//bf.append("{ \"NodeID\": \"");
+//bf.append(id);
+//bf.append("\", \"NodeName\": \"");
+//bf.append(name);
+//bf.append("\"");
+//if(!children.isEmpty()){
+//    bf.append(", ");
+//    for (Node child:children) {
+//        child.parseToJSON(bf);
+//    }
+//}
+//bf.append(" }");
+//
+//
+//
+//
+////        return bf.toString();
+//    }
 
 
 }
@@ -212,8 +193,6 @@ public class Tree implements Serializable {
 
     //Клонирование дерева
     public Tree cloneTree() {
-//        Node headClone = getHead().clone();
-//Tree treeClone = new Tree(getHead().clone());
         Tree tree = new Tree(getHead().clone());
         tree.treeName = this.treeName;
         return tree;
@@ -242,8 +221,6 @@ public class Tree implements Serializable {
         System.out.println("TreeId = "+treeId+" TreeName = "+ treeName);
         StringBuffer buffer = new StringBuffer();
         showNode(head, buffer);
-
-//        System.out.println(getNodeById(1).name);
     }
 
     public void newNode(int id) {
@@ -258,15 +235,4 @@ public class Tree implements Serializable {
             this.id++;
         }
     }
-
-
-//    @Override
-//    public String toString() {
-//        return "Tree{" +
-//                "treeId=" + treeId +
-//                ", treeName='" + treeName + '\'' +
-////                ", id=" + id +
-////                ", head=" + head +
-//                '}';
-//    }
 }

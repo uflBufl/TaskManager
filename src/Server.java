@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
+
 public class Server implements Runnable {
     Socket socket;
 
@@ -35,13 +36,6 @@ public class Server implements Runnable {
 
     }
 
-    public static void serializeTrees (OutputStream out, Trees trees) throws IOException {
-        (new ObjectOutputStream(out)).writeObject(trees);
-    }
-
-    public static Trees deserialaizeTrees (InputStream in) throws IOException, ClassNotFoundException {
-        return (Trees) (new ObjectInputStream(in)).readObject();
-    }
 
 
     @Override
@@ -57,8 +51,8 @@ public class Server implements Runnable {
             try (InputStream input = new FileInputStream(treeName)) {
 
                 currentTree = null;
-
-                trees = deserialaizeTrees(input);
+Serialization s = new Serialization();
+                trees = s.deserialaizeTrees(input);
                 input.close();
 
             } catch (Exception e) {
@@ -70,10 +64,13 @@ public class Server implements Runnable {
 
             while (!socket.isClosed()) {
 
-                int choice = in.read();
+                Action choice = (Action) in.readObject();
                 System.out.println("Server: Получили Action " + choice);
+
+
+
                 switch (choice) {
-                    case 1:{
+                    case CREATETREE:{
                         String nodeName = in.readUTF();
                         String newTreeName = in.readUTF();
 
@@ -86,11 +83,9 @@ public class Server implements Runnable {
                         for (Tree tree:trees.getTrees()) {
                             tree.showTree();
                         }
-//                                out.writeObject(currentTree);
-//                                out.flush();
                         break;
                     }
-                    case 3:{
+                    case DELETETREE:{
                         int id = in.readInt();
                         if(trees.getTreeById(id)!=null) {
                             trees.deleteTreeById(id);
@@ -103,25 +98,21 @@ public class Server implements Runnable {
                     //ошибку передавать и обрабатывать на сервере
                     //копонент ля рисовки дерева
                     //патерн слушатель
-                    case 5:{
+                    case CREATENODE:{
                         currentTree = trees.getTreeById(in.readInt());
                         int id = in.readInt();
                         String nodeName = in.readUTF();
 
                         if (nodeName.replaceAll(" ", "").equals("")) {
                             trees.getTreeById(currentTree.getTreeId()).newNode(id);
-                            //                                node = new Node(id);
                         } else {
                             trees.getTreeById(currentTree.getTreeId()).newNode(id, nodeName);
-                            //                                node = new Node(id, name);
                         }
-//                        out.writeObject(currentTree);
-//                        out.flush();
                         break;
                     }
 
                     //Зачем я делаю через currentTree?!!??!?!?! Возможно в этом ошибка. Проверить!!
-                    case 6:{
+                    case DELETENODE:{
                         currentTree = trees.getTreeById(in.readInt());
                         int id = in.readInt();
 
@@ -132,11 +123,9 @@ public class Server implements Runnable {
                         else{
                             System.out.println("Узла с таким id нет");
                         }
-//                        out.writeObject(currentTree);
-//                        out.flush();
                         break;
                     }
-                    case 7:{
+                    case SPLITTREE:{
                         currentTree = trees.getTreeById(in.readInt());
                         int id = in.readInt();
 
@@ -151,7 +140,7 @@ public class Server implements Runnable {
                         out.flush();
                         break;
                     }
-                    case 8:{
+                    case CLONETREE:{
                         currentTree = trees.getTreeById(in.readInt());
 
                         if(currentTree != null){
@@ -164,8 +153,9 @@ public class Server implements Runnable {
                         out.flush();
                         break;
                     }
-                    case 10:{
+                    case SAVE:{
                         try (OutputStream output = new FileOutputStream("2.bin")) {
+
 //                        try (FileWriter output = new FileWriter("3.txt")) {
 //                            Gson gson = new GsonBuilder()
 //                                    .setPrettyPrinting()
@@ -174,24 +164,26 @@ public class Server implements Runnable {
 //output.write(outputStr);
 //output.flush();
 //System.out.println(outputStr);
-                            serializeTrees(output, trees);
+
+                            Serialization s = new Serialization();
+
+                            s.serializeTrees(output, trees);
                         }
                         catch (Exception e) {
                             System.out.print(e.getMessage());
                         }
                         break;
                     }
-                    case 11:{
-//                                out.writeObject(trees);
+                    case LOAD:{
                         for (Tree tree:trees.getTrees()) {
                             tree.showTree();
                         }
-
+                        Serialization s = new Serialization();
                         try (InputStream input = new FileInputStream(treeName)) {
 
                             currentTree = null;
 
-                            trees = deserialaizeTrees(input);
+                            trees = s.deserialaizeTrees(input);
                             input.close();
 
                         } catch (Exception e) {
@@ -199,7 +191,7 @@ public class Server implements Runnable {
                         }
 
 
-                        serializeTrees(out,trees);
+                        s.serializeTrees(out,trees);
                         out.flush();
                         break;
                     }
@@ -208,44 +200,7 @@ public class Server implements Runnable {
                     }
                 }
 
-
-//                    Action neededAction = (Action) reader.readObject();
-//                        System.out.println("Server: Получили Action " + choice);
-
-
             }
-//                int typeInt;
-//                while ((typeInt = reader.readInt()) != -1) {
-//                    Buildings.TypeOfBuilding type = Buildings.getType(typeInt);
-//
-//                    BuildingFactory bf =  new OfficeFactory();
-//                    switch (type){
-//                        case DWELLING:  bf = new DwellingFactory(); break;
-//                        case OFFICE:    bf = new OfficeFactory();   break;
-//                        case HOTEL:     bf = new HotelFactory();    break;
-//                    }
-//                    Buildings.setBuildingFactory(bf);
-//
-//                    Building b = Buildings.inputBuilding(reader);
-//                    int cost = 0;
-//                    try {
-//                        cost = calculateCost(b, getMultiplier(type));
-//                        System.out.println("Server: Тип здания = " + type.name() +
-//                                "; Общая площадь = " + b.getTotalSquare() + "; Стоимость = " + cost);
-//                    } catch (BuildingUnderArrestException e) {
-//                        cost = -1;
-//                        System.out.println("Server: " + e.getMessage());
-//                    }
-//
-//                    writer.writeInt(cost);
-//                    writer.flush();
-//                    System.out.println("Server: Стоимость отправленна.");
-//                }
-
-//                System.out.println("Server: Работа с данным клиентом завершена(закрываем Streams and socket).");
-//                reader.close();
-//                writer.close();
-//                socket.close();
         }
         catch (Exception e){
             System.out.println(e.getMessage());
