@@ -16,7 +16,7 @@ public class Server implements Runnable {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Server: Start");
-        try (ServerSocket server = new ServerSocket(4444)) {
+        try (ServerSocket server = new ServerSocket(4445)) {
             System.out.println("Server: Серверный сокет с портом 4444 создан.");
             System.out.println("Server: Входим в бесконечный цикл ожидания...");
             while (true) {

@@ -9,7 +9,7 @@ public class Client {
 
     public Client() {
         try {
-            s = new Socket("localhost", 4444);
+            s = new Socket("localhost", 4445);
             in = new ObjectInputStream(new DataInputStream(s.getInputStream()));
             out = new ObjectOutputStream(new DataOutputStream(s.getOutputStream()));
         }

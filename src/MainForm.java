@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.*;
 
@@ -10,16 +9,19 @@ public class MainForm extends JFrame  {
     public Trees trees = new Trees();
     Tree currentTree;
     public Client client;
+    private int whatIsSelected = 0;
+    private int treeId = 0;
 
     private javax.swing.JPanel JPanel;
     private JButton createTreeButton;
-    private JButton button3;
-    private JButton button4;
-    private JButton button5;
+    private JButton deleteTreeButton;
+    private JButton newNodeButton;
+    private JButton deleteNodeButton;
     private JTree tree1;
-    private JButton button1;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JButton splitTreeButton;
+    private JTextField nodeName;
+    private JTextField nodeId;
+    private JButton cloneTreeButton;
 
     public void createTree(String nodeName, String treeName){
         this.client.createTree(nodeName, treeName);
@@ -27,6 +29,49 @@ public class MainForm extends JFrame  {
         setDefaultTree();
     }
 
+    public void deleteTree(){
+//        System.out.println("Введите id дерева");
+//        int id = in.nextInt();
+        if(trees.getTreeById(treeId)!=null) {
+
+            client.deleteTreeById(treeId);
+            trees = client.getData();
+        }
+//        else System.out.println("Дерева с таким id нет");
+
+
+//        this.client.createTree(nodeName, treeName);
+//        trees = client.getData();
+        setDefaultTree();
+    }
+
+    public void newNode(String nodeName){
+        this.client.newNode(treeId, Integer.parseInt(nodeId.getText()),nodeName);
+        trees = client.getData();
+        setDefaultTree();
+    }
+
+    public void deleteNode(){
+        this.client.deleteNode(treeId,Integer.parseInt(nodeId.getText()));
+        trees = client.getData();
+        setDefaultTree();
+    }
+
+    public void splitTree(){
+        System.out.println(2);
+        this.client.splitTree(treeId,Integer.parseInt(nodeId.getText()));
+        System.out.println(3);
+        trees = client.getData();
+        System.out.println(4);
+        setDefaultTree();
+        System.out.println(5);
+    }
+
+    public void cloneTree(){
+        this.client.cloneTree(treeId);
+        trees = client.getData();
+        setDefaultTree();
+    }
 
     public void setChildNodes(Node node, DefaultMutableTreeNode next){
         if(node.children != null && !node.children.isEmpty()){
@@ -57,15 +102,16 @@ public class MainForm extends JFrame  {
         for (Tree tree:trees.getTrees()) {
 
 
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode("Id:"+tree.getTreeId());
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode("Id:" + tree.getTreeId());
             node.setUserObject(tree);
             root.add(node);
+//            if (tree.getHead() != null) {
+                DefaultMutableTreeNode head = new DefaultMutableTreeNode("Id:" + tree.getHead().id);
+                head.setUserObject(tree.getHead());
+                node.add(head);
 
-            DefaultMutableTreeNode head = new DefaultMutableTreeNode("Id:"+tree.getHead().id);
-            head.setUserObject(tree.getHead());
-            node.add(head);
-
-            setChildNodes(tree.getHead(), head);
+                setChildNodes(tree.getHead(), head);
+//            }
         }
 
 //        for (int i = 0; i < trees.getTrees().size(); i++){
@@ -98,18 +144,25 @@ DefaultMutableTreeNode d = new DefaultMutableTreeNode();
 
         TreeSelectionListener tse = event ->{
           if(event.getPath().getPath().length == 2) {
+              whatIsSelected = 1;
               Tree selectedNode = ((Tree) ((DefaultMutableTreeNode) event.getPath().getLastPathComponent()).getUserObject());
-              textField1.setText(selectedNode.getTreeName());
-              textField2.setText(Integer.toString(selectedNode.getTreeId()));
+              treeId =  selectedNode.getTreeId();
+              nodeName.setText(selectedNode.getTreeName());
+              nodeId.setText(Integer.toString(selectedNode.getTreeId()));
           }
           else if(event.getPath().getPath().length > 2){
+              whatIsSelected = 2;
               Node selectedNode = ((Node) ((DefaultMutableTreeNode) event.getPath().getLastPathComponent()).getUserObject());
-              textField1.setText(selectedNode.name);
-              textField2.setText(Integer.toString(selectedNode.id));
+              treeId = ((Tree)((DefaultMutableTreeNode)event.getPath().getPathComponent(1)).getUserObject()).getTreeId();
+//              System.out.println(treeId);
+              nodeName.setText(selectedNode.name);
+              nodeId.setText(Integer.toString(selectedNode.id));
           }
           else{
-              textField1.setText("");
-              textField2.setText("");
+              whatIsSelected = 0;
+              treeId = 0;
+              nodeName.setText("");
+              nodeId.setText("");
           }
         };
 
@@ -121,11 +174,27 @@ createTreeButton.addActionListener(e -> {
     ctf.start();
 });
 
+        deleteTreeButton.addActionListener(e -> {
+            deleteTree();
+        });
 
+        newNodeButton.addActionListener(e -> {
+            NewNodeForm nnf = new NewNodeForm(trees, this);
+            nnf.start();
+        });
 
+        deleteNodeButton.addActionListener(e -> {
+            deleteNode();
+        });
 
+        splitTreeButton.addActionListener(e -> {
+            System.out.println(1);
+            splitTree();
+        });
 
-
+        cloneTreeButton.addActionListener(e -> {
+            cloneTree();
+        });
 
         ActionListener fileActionListener = event -> {
             Trees trees = new Trees();

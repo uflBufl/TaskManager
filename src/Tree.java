@@ -66,6 +66,15 @@ class Node implements Serializable, Cloneable {
         }
         return cloneNode;
     }
+
+//    public String parseToJSON(){
+//        StringBuffer bf = new StringBuffer();
+//
+//
+//
+//        return bf.toString();
+//    }
+
 }
 
 
