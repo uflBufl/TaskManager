@@ -1,8 +1,10 @@
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Main {
+
 
     public static void main(String[] args) {
         System.out.println("Hello World!");
@@ -44,6 +46,7 @@ public class Main {
         StringBuffer bf = new StringBuffer();
 
 
+//        System.out.println("\n\n\n\n\n");
         //Преоверить ObjectMapper
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        try {
@@ -54,12 +57,38 @@ public class Main {
 //        }
 
 
-        //Преоверить parseToJSON
+//        Преоверить parseToJSON
 //        trees.getTreeById(0).getHead().parseToJSON(bf);
-//        System.out.println(bf);
+//        trees.getTreeById(0).parseToJSON(bf);
+        trees.parseToJSON(bf);
+        System.out.println(bf);
+
+        System.out.println("\n\n\n\n\n");
+
+        String str = "{ \"NodeID\": \"1\", \"NodeName\": \"child1\", \"children\": { \"NodeID\": \"4\", \"NodeName\": \"child4\" }, }";
+        String str1 = "{ \"TreeID\": \"1\", \"TreeName\": \"tasks\", \"TreeMaxID\": \"6\", \"Tree\": { \"NodeID\": \"0\", \"NodeName\": \"Задачи\", \"children\": { \"NodeID\": \"1\", \"NodeName\": \"Сделать ТИ\" },{ \"NodeID\": \"2\", \"NodeName\": \"Поесть\" }, }, }";
+        String str2 = "{ \"NodeID\": \"0\", \"NodeName\": \"MainChild\", \"children\": { \"NodeID\": \"1\", \"NodeName\": \"child1\", \"children\": { \"NodeID\": \"4\", \"NodeName\": \"child4\" }, },{ \"NodeID\": \"2\", \"NodeName\": \"child2\" },{ \"NodeID\": \"6\", \"NodeName\": \"child6\" },{ \"NodeID\": \"7\", \"NodeName\": \"child7\" },{ \"NodeID\": \"3\", \"NodeName\": \"child3\", \"children\": { \"NodeID\": \"5\", \"NodeName\": \"child5\" }, }, }";
+        String str3 = "{ \"TreesMaxID\": \"2\", \"Trees\": { \"TreeID\": \"0\", \"TreeName\": \"child\", \"TreeMaxID\": \"6\", \"Tree\": { \"NodeID\": \"0\", \"NodeName\": \"MainChild\", \"children\": { \"NodeID\": \"1\", \"NodeName\": \"child1\", \"children\": { \"NodeID\": \"4\", \"NodeName\": \"child4\" }, },{ \"NodeID\": \"2\", \"NodeName\": \"child2\" },{ \"NodeID\": \"3\", \"NodeName\": \"child3\", \"children\": { \"NodeID\": \"5\", \"NodeName\": \"child5\" }, }, }, },{ \"TreeID\": \"1\", \"TreeName\": \"tasks\", \"TreeMaxID\": \"3\", \"Tree\": { \"NodeID\": \"0\", \"NodeName\": \"Задачи\", \"children\": { \"NodeID\": \"1\", \"NodeName\": \"Сделать ТИ\" },{ \"NodeID\": \"2\", \"NodeName\": \"Поесть\" }, }, }, }.";
+
+        ParseFromJSON parse = new ParseFromJSON();
+
+        Node node1 = ParseFromJSON.parseNodeFromJSON(str2);
+
+        Tree tree1 = new Tree(node1);
+
+//        tree1.showTree();
+
+        Tree tree3 = ParseFromJSON.parseTreeFromJSON(str1);
+//        tree3.showTree();
+
+        Trees trees3 = ParseFromJSON.parseTreesFromJSON(str3);
+//        System.out.println(trees3.getMaxID());
+//        for(Tree tree123: trees3.trees){
+//            tree123.showTree();
+//        }
 
 //        tree.deleteTree();
-//        System.out.println(tree.getHead() == null);
+//        System.out.println(subs);
 
         System.out.println("\n\n\n\n\n");
 
@@ -70,7 +99,6 @@ public class Main {
         //МЭИН ФОРМ!!!
         MainForm mf = new MainForm();
         mf.start();
-
 
 
 

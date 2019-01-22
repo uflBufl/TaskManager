@@ -29,7 +29,7 @@ public class CreateTreeForm extends JFrame {
 
         setTitle("Create");
         setContentPane(jPanel);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setSize(500, 500);
         setVisible(true);
     }

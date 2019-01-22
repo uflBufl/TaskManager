@@ -48,28 +48,48 @@ class Node implements Serializable, Cloneable {
         return cloneNode;
     }
 
-//    public void parseToJSON(StringBuffer bf){
-////        StringBuffer bf = new StringBuffer();
-//bf.append("{ \"NodeID\": \"");
-//bf.append(id);
-//bf.append("\", \"NodeName\": \"");
-//bf.append(name);
-//bf.append("\"");
-//if(!children.isEmpty()){
-//    bf.append(", ");
-//    for (Node child:children) {
-//        child.parseToJSON(bf);
+    public void parseToJSON(StringBuffer bf){
+//        StringBuffer bf = new StringBuffer();
+bf.append("{ \"NodeID\": \"");
+bf.append(id);
+bf.append("\", \"NodeName\": \"");
+bf.append(name);
+bf.append("\"");
+if(!children.isEmpty()){
+    bf.append(", \"children\": ");
+    for (Node child:children) {
+        child.parseToJSON(bf);
+    }
+}
+bf.append(" },");
+
+
+
+
+//        return bf.toString();
+    }
+
+//    public void addChild(Node child){
+//        child.children
+//        children.add(child);
 //    }
-//}
-//bf.append(" }");
+
+//    public void parseFromJSON(String str){
 //
-//
-//
-//
-////        return bf.toString();
 //    }
 
 
+    @Override
+    public String toString() {
+//        return "Node{" +
+//                "id=" + id +
+//                ", parent=" + parent +
+//                ", children=" + children +
+//                ", name='" + name + '\'' +
+//                '}';
+
+        return "id: " + id + " Name: " + name;
+    }
 }
 
 
@@ -92,6 +112,10 @@ public class Tree implements Serializable {
     Tree(Node head) {
         this.head = head;
     }
+
+//    Tree(Node head) {
+//        this.head = head;
+//    }
 
     //Получить голову
     public Node getHead() {
@@ -128,6 +152,14 @@ public class Tree implements Serializable {
 
     public void setTreeName(String treeName) {
         this.treeName = treeName;
+    }
+
+    public void setMaxId(int maxId) {
+        this.id = maxId;
+    }
+
+    public int getMaxID(){
+        return id;
     }
 
     //Получить Node по id
@@ -191,7 +223,10 @@ public class Tree implements Serializable {
         }
     }
 
-    //Клонирование дерева
+    /**
+     * Функция получения клона дерева
+     * @return возвращает клонированное дерево
+     */
     public Tree cloneTree() {
         Tree tree = new Tree(getHead().clone());
         tree.treeName = this.treeName;
@@ -235,4 +270,50 @@ public class Tree implements Serializable {
             this.id++;
         }
     }
+
+//    public void parseToJSON(StringBuffer bf){
+//        bf.append("{ \"TreeID\": \"");
+//        bf.append(treeId);
+//        bf.append("\", \"TreeName\": \"");
+//        bf.append(treeName);
+//        bf.append("\"");
+////        getHead().parseToJSON(bf);
+//        if(!(head == null)){
+//            bf.append(", \"Tree\": ");
+//            getHead().parseToJSON(bf);
+//        }
+//        bf.append(" },");
+//    }
+
+        public void parseToJSON(StringBuffer bf){
+        bf.append("{ \"TreeID\": \"");
+        bf.append(treeId);
+        bf.append("\", \"TreeName\": \"");
+        bf.append(treeName);
+            bf.append("\", \"TreeMaxID\": \"");
+            bf.append(id);
+        bf.append("\"");
+//        getHead().parseToJSON(bf);
+        if(!(head == null)){
+            bf.append(", \"Tree\": ");
+            getHead().parseToJSON(bf);
+        }
+        bf.append(" },");
+    }
+
+    @Override
+    public String toString() {
+//        return "Tree{" +
+//                "treeId=" + treeId +
+//                ", treeName='" + treeName + '\'' +
+//                ", id=" + id +
+//                ", head=" + head +
+//                '}';
+
+        return "ID: " + getTreeId() + " Name: " + treeName;
+    }
+
+    //    public void parseFromJSON(StringBuffer bf){
+//
+//    }
 }

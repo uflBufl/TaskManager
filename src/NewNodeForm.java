@@ -27,7 +27,7 @@ public class NewNodeForm extends JFrame {
 
         setTitle("Create");
         setContentPane(jPanel);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setSize(300, 400);
         setVisible(true);
     }

@@ -8,9 +8,10 @@ public class ServerMenu {
     public void start(){
 
 
-        Client client = new Client();
+        Client client = new Client(new MainForm());
 
-        trees = client.getData();
+//        trees = client.getData();
+        client.getData();
 
         boolean menu = true;
         Scanner in = new Scanner(System.in);
@@ -40,7 +41,8 @@ public class ServerMenu {
                     String treeName = in.next();
 
                     client.createTree(name, treeName);
-                    trees = client.getData();
+                    //        trees = client.getData();
+                    client.getData();
                     break;
                 }
                 case 2:{
@@ -60,7 +62,8 @@ public class ServerMenu {
                         }
 
                         client.deleteTreeById(id);
-                        trees = client.getData();
+                        //        trees = client.getData();
+                        client.getData();
 
                     }
                     else System.out.println("Дерева с таким id нет");
@@ -84,7 +87,8 @@ public class ServerMenu {
                             String name = in.next();
 
                             client.newNode(currentTree.getTreeId(),id,name);
-                            trees  = client.getData();
+                            //        trees = client.getData();
+                            client.getData();
                         }
                         else{
                             System.out.println("Узла с таким id нет");
@@ -101,7 +105,8 @@ public class ServerMenu {
                         int id = in.nextInt();
 
                         client.deleteNode(currentTree.getTreeId(),id);
-                        trees  = client.getData();
+                        //        trees = client.getData();
+                        client.getData();
                     }
                     else{
                         System.out.println("Дерево не выбрано");
@@ -114,7 +119,8 @@ public class ServerMenu {
                         int id = in.nextInt();
 
                         client.splitTree(currentTree.getTreeId(),id);
-                        trees  = client.getData();
+                        //        trees = client.getData();
+                        client.getData();
                     }
                     else{
                         System.out.println("Дерево не выбрано");
@@ -124,7 +130,8 @@ public class ServerMenu {
                 case 8:{
 
                     client.cloneTree(currentTree.getTreeId());
-                    trees  = client.getData();
+                    //        trees = client.getData();
+                    client.getData();
                     break;
                 }
                 case 9:{
@@ -144,7 +151,8 @@ public class ServerMenu {
                     name = name.concat(".bin");
                     try (InputStream input = new FileInputStream(name)) {
                         currentTree = null;
-                        trees = client.getData();
+                        //        trees = client.getData();
+                        client.getData();
 //                        trees = deserialaizeTrees(input);
                     }
                     catch (Exception e) {

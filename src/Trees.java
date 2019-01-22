@@ -15,6 +15,14 @@ public class Trees implements ITrees, Serializable {
         this.trees.addAll(trees);
     }
 
+    public void setMaxId(int maxId) {
+        this.id = maxId;
+    }
+
+    public int getMaxID(){
+        return id;
+    }
+
     public void createTree(String name){
         createTree(name, null);
     }
@@ -56,6 +64,25 @@ public class Trees implements ITrees, Serializable {
         }
         if(clone != null)trees.add(clone);
     }
+    public void parseToJSON(StringBuffer bf){
+        bf.append("{ \"TreesMaxID\": \"");
+        bf.append(id);
+        bf.append("\", \"Trees\": ");
+        if(!trees.isEmpty()){
+            for (Tree tree:trees) {
+                tree.parseToJSON(bf);
+            }
+        }
+
+//        bf.append("\", \"TreesMaxID\": \"");
+//        bf.append(id);
+
+        bf.append(" }.");
+    }
+
+//    public void parseFromJSON(StringBuffer bf){
+//
+//    }
 
 //    public static void serializeBuilding (OutputStream out) throws IOException {
 //        (new ObjectOutputStream(out)).writeObject(building);
