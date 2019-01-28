@@ -15,6 +15,8 @@ public class Client {
 
     boolean wait = false;
 
+    ParseFromJSON parse = new ParseFromJSON();
+
 
     public Client(MainForm mf) {
         this.mf = mf;
@@ -43,7 +45,7 @@ while(true) {
         switch(type){
             case "TREES":{
                 String params = ParseFromJSON.findParamsFromJSON(str);
-                mf.trees = ParseFromJSON.parseTreesFromJSON(params);
+                mf.trees = parse.parseTreesFromJSON(params);
                 break;
             }
             case "UPDATE":{

@@ -8,17 +8,16 @@ public class NewNodeForm extends JFrame {
     Trees trees;
     MainForm mf;
 
-    public NewNodeForm(Trees trees, MainForm frame){
+    public NewNodeForm(Trees trees, MainForm frame) {
         this.trees = trees;
         this.mf = frame;
     }
 
-    public void start(){
+    public void start() {
         button1.addActionListener(e -> {
-            if(textField1.getText().equals("")){
+            if (textField1.getText().equals("")) {
                 dispose();
-            }
-            else{
+            } else {
                 mf.newNode(textField1.getText());
                 dispose();
             }

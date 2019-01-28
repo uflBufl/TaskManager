@@ -1,131 +1,118 @@
+/**
+ * Класс методов ParseFromSJSON.
+ * @version 0.9
+ * @autor Евгений Барабанов
+ */
 public class ParseFromJSON {
-    public static String findSubstring(String string){
-//        String substring = new String(string);
-//        System.out.println(string);
+
+    /**
+     * Функция поиска начала значения
+     * @param str - строка для поиска
+     * @param start - точка начала поиска
+     * @return начало значения
+     */
+    public static int findStart(String str, int start) {
+        int i = str.indexOf(':', start + 1);
+        return str.indexOf('"', i) + 1;
+    }
+
+    /**
+     * Функция поиска конца значения
+     * @param str - строка для поиска
+     * @param start - точка начала поиска
+     * @return конец значения
+     */
+    public static int findEnd(String str, int start) {
+        return str.indexOf('"', start);
+    }
+
+    /**
+     * Функция поиска подстроки выделенной {}
+     * @param string - строка для поиска
+     * @return подстроки выделенной {}
+     */
+    public static String findSubstring(String string) {
         int n = 1;
         int i = 1;
 
-        while (n != 0){
+        while (n != 0) {
             char c = string.charAt(i);
-            if(c == '}'){
+            if (c == '}') {
                 n--;
             }
-            if(c == '{'){
+            if (c == '{') {
                 n++;
             }
             i++;
         }
-        String substring = string.substring(0,i);
-//        System.out.println(substring);
-        return substring;
+
+        return string.substring(0, i);
     }
 
-    public static Node parseNodeFromJSON(String str){
-        int i = str.indexOf(':')+1;
-        int j = str.indexOf('"',i)+1;
-        i = str.indexOf('"',j);
-        String NodeID = str.substring(j, i);
+    /**
+     * Функция нахождения Узла дерева из JSON
+     * @param str - строка для поиска в формате JSON
+     * @return Узел дерева из JSON
+     */
+    public static Node parseNodeFromJSON(String str) {
+        int end = 0;
+
+        int start = findStart(str, end);
+        end = findEnd(str, start);
+
+        String NodeID = str.substring(start, end);
         int nodeID = Integer.parseInt(NodeID);
 
-//        System.out.println(nodeID);
+        start = findStart(str, end);
+        end = findEnd(str, start);
 
-        j = str.indexOf(':', i+1);
-        i = str.indexOf('"',j)+1;
-        j = str.indexOf('"',i);
-        String NodeName = str.substring(i,j);
+        String NodeName = str.substring(start, end);
+        Node newnode = new Node(nodeID, NodeName);
 
-//        System.out.println(NodeName);
+        int startChild = str.indexOf('{', end);
 
-//        ArrayList<Node> children = new ArrayList<>();
-
-        Node newnode = new Node(nodeID,NodeName);
-
-//        boolean child = false;
-        int startChild = str.indexOf('{', j);
-        while (startChild != -1){
-//            System.out.println(startChild);
-
+        while (startChild != -1) {
             String subStr = str.substring(startChild);
-//            System.out.println(subStr);
-
             String childStr = findSubstring(subStr);
-//            System.out.println(childStr);
-
-//            int endChild = j+childStr.length();
             int endChild = startChild + childStr.length();
-//            System.out.println(endChild);
-//            System.out.println(str.charAt(endChild));
-//            System.out.println(childStr);
-
             Node child = parseNodeFromJSON(childStr);
-
-            //            children.add(node);
-
             newnode.children.add(child);
             child.parent = newnode;
-
-            startChild = str.indexOf('{',endChild);
-//            j += endChild;
+            startChild = str.indexOf('{', endChild);
         }
 
         return newnode;
-
-//        Node node = new Node(Integer.parseInt(NodeID), NodeName, children);
-
-
-//        if(str.charAt(j+2) != '}'){
-//            i = str.indexOf('{',j);
-//            String subStr = str.substring(i);
-//            String newNode = findSubstring(subStr);
-//            parseNodeFromJSON(newNode);
-//
-//        }
-//int i = str.indexOf("NodeId");
-//i += 6;
-
-
     }
 
+    /**
+     * Функция нахождения Дерева из JSON
+     * @param str - строка для поиска в формате JSON
+     * @return дерево
+     */
+    public static Tree parseTreeFromJSON(String str) {
+        int end = 0;
 
+        int start = findStart(str, end);
+        end = findEnd(str, start);
 
-
-
-
-    public static Tree parseTreeFromJSON(String str){
-
-//        System.out.println(str);
-
-        int i = str.indexOf(':')+1;
-        int j = str.indexOf('"',i)+1;
-        i = str.indexOf('"',j);
-        String TreeID = str.substring(j, i);
+        String TreeID = str.substring(start, end);
         int treeID = Integer.parseInt(TreeID);
 
-        j = str.indexOf(':', i+1);
-        i = str.indexOf('"',j)+1;
-        j = str.indexOf('"',i);
-        String TreeName = str.substring(i,j);
+        start = findStart(str, end);
+        end = findEnd(str, start);
 
-        i = str.indexOf(':',j+1);
-        j = str.indexOf('"', i)+1;
-        i = str.indexOf('"',j);
-        String TreeMaxID = str.substring(j,i);
-//        System.out.println(TreeMaxID);
+        String TreeName = str.substring(start, end);
+
+        start = findStart(str, end);
+        end = findEnd(str, start);
+
+        String TreeMaxID = str.substring(start, end);
         int maxID = Integer.parseInt(TreeMaxID);
 
-//        System.out.println(treeID);
-//        System.out.println(TreeName);
-//        System.out.println(maxID);
-
-
-        j = i;
-
-        int startTree = str.indexOf('{', j);
+        int startTree = str.indexOf('{', end);
 
         String subStr = str.substring(startTree);
-
         String treeStr = findSubstring(subStr);
-
         Node head = parseNodeFromJSON(treeStr);
 
         Tree tree = new Tree(head);
@@ -136,54 +123,45 @@ public class ParseFromJSON {
         return tree;
     }
 
-
-
-
-
-    public static Trees parseTreesFromJSON(String str){
+    /**
+     * Функция нахождения Деревьев из JSON
+     * @param str - строка для поиска в формате JSON
+     * @return деревьев
+     */
+    public static Trees parseTreesFromJSON(String str) {
         Trees trees = new Trees();
+        int end = 0;
 
-        int i = str.indexOf(':')+1;
-        int j = str.indexOf('"',i)+1;
-        i = str.indexOf('"',j);
-        String TreesMaxID = str.substring(j, i);
+        int start = findStart(str, end);
+        end = findEnd(str, start);
+
+        String TreesMaxID = str.substring(start, end);
         int treesMaxID = Integer.parseInt(TreesMaxID);
 
         trees.setMaxId(treesMaxID);
 
         int startTree = str.indexOf('{', 3);
 
-        while (startTree != -1){
-//            System.out.println(startChild);
-
+        while (startTree != -1) {
             String subStr = str.substring(startTree);
-//            System.out.println(subStr);
-
             String treeStr = findSubstring(subStr);
-//            System.out.println(childStr);
-
-//            int endChild = j+childStr.length();
             int endTree = startTree + treeStr.length();
-//            System.out.println(endChild);
-//            System.out.println(str.charAt(endChild));
-//            System.out.println(childStr);
-
             Tree tree = parseTreeFromJSON(treeStr);
-
-            //            children.add(node);
-
             trees.trees.add(tree);
-//            tree.parent = newnode;
-
-            startTree = str.indexOf('{',endTree);
-//            j += endChild;
+            startTree = str.indexOf('{', endTree);
         }
 
         return trees;
     }
 
-    public static String createJSON(String type, String str){
-StringBuffer bf = new StringBuffer();
+    /**
+     * Функция Создания сообщения с заданным типом и Параметрами
+     * @param type - строка Типа сообщения
+     * @param str - строка параметров сообщения в формате JSON
+     * @return сообщение с заданным типом и Параметрами
+     */
+    public static String createJSON(String type, String str) {
+        StringBuffer bf = new StringBuffer();
 
         bf.append("{ \"Type\": \"");
         bf.append(type);
@@ -191,30 +169,34 @@ StringBuffer bf = new StringBuffer();
         bf.append(str);
         bf.append(" }.");
 
-        String newStr = bf.toString();
-
-        return newStr;
+        return bf.toString();
     }
 
-    public static String findTypeFromJSON(String str){
+    /**
+     * Функция нахождения типа сообщения из строки в формате JSON
+     * @param str - строка поиска в формате JSON
+     * @return типа сообщения из строки в формате JSON
+     */
+    public static String findTypeFromJSON(String str) {
+        int end = 0;
 
-        int i = str.indexOf(':')+1;
-        int j = str.indexOf('"',i)+1;
-        i = str.indexOf('"',j);
-        String Type = str.substring(j, i);
+        int start = findStart(str, end);
+        end = findEnd(str, start);
 
-        return Type;
+        return str.substring(start, end);
     }
 
-    public static String findParamsFromJSON(String str){
-
+    /**
+     * Функция нахождения параметров сообщения из строки в формате JSON
+     * @param str - строка поиска в формате JSON
+     * @return параметров сообщения из строки в формате JSON
+     */
+    public static String findParamsFromJSON(String str) {
         int startParams = str.indexOf('{', 3);
 
         String subStr = str.substring(startParams);
 
-        String params = findSubstring(subStr);
-
-        return params;
+        return findSubstring(subStr);
     }
 
 }

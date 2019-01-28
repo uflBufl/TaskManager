@@ -1,33 +1,69 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class Trees implements ITrees, Serializable {
-    ArrayList<Tree> trees = new ArrayList<>();
+/**
+ * Класс Деревьев.
+ *
+ * @version 0.9
+ * @autor Евгений Барабанов
+ */
+public class Trees implements Serializable {
+    /** Поле листа деревьев */
+    public ArrayList<Tree> trees = new ArrayList<>();
+
+    /** Поле id листа деревьев */
     private int id = 0;
 
+    /** Константа пустого листа деревьев */
     final static private ArrayList<Tree> EMPTY_TREES = new ArrayList<>();
 
-    Trees(){
+    /**
+     * Конструктор - создание нового объекта с определенными значениями
+     * @see Trees#Trees()
+     */
+    Trees() {
         this(EMPTY_TREES);
     }
 
-    Trees(ArrayList<Tree> trees){
+    /**
+     * Конструктор - создание нового объекта с определенными значениями
+     * @param trees - лист деревьев
+     * @see Trees#Trees(ArrayList)
+     */
+    Trees(ArrayList<Tree> trees) {
         this.trees.addAll(trees);
     }
 
+    /**
+     * Процедура определения значения поля {@link Trees#id}
+     * @param maxId - id листа деревьев
+     */
     public void setMaxId(int maxId) {
         this.id = maxId;
     }
 
-    public int getMaxID(){
+    /**
+     * Функция получения значения поля {@link Trees#id}
+     * @return id листа деревьев
+     */
+    public int getMaxID() {
         return id;
     }
 
-    public void createTree(String name){
+    /**
+     * Процедура создания дерева
+     * @param name - имя Главного узла дерева
+     */
+    public void createTree(String name) {
         createTree(name, null);
     }
 
-    public void createTree(String name, String treeName){
+    /**
+     * Процедура создания дерева
+     * @param name - имя Главного узла дерева
+     * @param treeName - имя дерева
+     */
+    public void createTree(String name, String treeName) {
         Tree tree = new Tree(name);
         tree.setTreeId(id);
         this.id++;
@@ -35,64 +71,68 @@ public class Trees implements ITrees, Serializable {
         trees.add(tree);
     }
 
-    public Tree getTreeById(int id){
-        for (Tree tree:trees) {
-            if(tree.getTreeId()==id) return tree;
+    /**
+     * Функция получения дерева по его id
+     * @param id - id дерева
+     */
+    public Tree getTreeById(int id) {
+        for (Tree tree : trees) {
+            if (tree.getTreeId() == id) return tree;
         }
         return null;
     }
 
-    public void deleteTreeById(int id){
-        for (Tree tree:trees) {
-            if(tree.getTreeId()==id){ trees.remove(getTreeById(id)); break;}
+    /**
+     * Функция удаления дерева по его id
+     * @param id - id дерева
+     */
+    public void deleteTreeById(int id) {
+        for (Tree tree : trees) {
+            if (tree.getTreeId() == id) {
+                trees.remove(getTreeById(id));
+                break;
+            }
         }
     }
 
-    public ArrayList<Tree> getTrees(){
+    /**
+     * Функция получения значения поля {@link Trees#trees}
+     * @return лист деревьев
+     */
+    public ArrayList<Tree> getTrees() {
         return trees;
     }
 
-    public void cloneTree(int id){
+    /**
+     * Функция клонирования дерева по его id
+     * @param id - id дерева
+     */
+    public void cloneTree(int id) {
         Tree clone = null;
-        for (Tree tree:trees) {
-            if(tree.getTreeId()==id) {
+        for (Tree tree : trees) {
+            if (tree.getTreeId() == id) {
                 clone = tree.cloneTree();
                 clone.setTreeId(this.id);
                 this.id++;
-//                trees.add(clone);
             }
         }
-        if(clone != null)trees.add(clone);
+        if (clone != null) trees.add(clone);
     }
-    public void parseToJSON(StringBuffer bf){
+
+    /**
+     * Функция перевода Деревьев в формат JSON
+     * @param bf - StringBuffer в который будут записаны деревья
+     */
+    public void parseToJSON(StringBuffer bf) {
         bf.append("{ \"TreesMaxID\": \"");
         bf.append(id);
         bf.append("\", \"Trees\": ");
-        if(!trees.isEmpty()){
-            for (Tree tree:trees) {
+        if (!trees.isEmpty()) {
+            for (Tree tree : trees) {
                 tree.parseToJSON(bf);
             }
         }
-
-//        bf.append("\", \"TreesMaxID\": \"");
-//        bf.append(id);
-
         bf.append(" }.");
     }
-
-//    public void parseFromJSON(StringBuffer bf){
-//
-//    }
-
-//    public static void serializeBuilding (OutputStream out) throws IOException {
-//        (new ObjectOutputStream(out)).writeObject(building);
-//    }
-//
-//    public static Building deserialaizeBuilding (InputStream in) throws IOException, ClassNotFoundException {
-//        return (Building) (new ObjectInputStream(in)).readObject();
-//    }
-
-
-
 
 }

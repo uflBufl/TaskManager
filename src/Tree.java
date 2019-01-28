@@ -1,128 +1,72 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
-class Node implements Serializable, Cloneable {
-    int id;
-    Node parent;
-    ArrayList<Node> children = new ArrayList<>();
-    String name;
-
-    final static private Node EMPTY_PARENT = null;
-    final static private ArrayList<Node> EMPTY_CHILD = new ArrayList<>();
-    final static private int START_TREE_ID = 0;
-    final static private String DEFAULT_STRING = "";
-
-    Node() {
-        this(START_TREE_ID);
-    }
-
-    Node(int id) {
-        this(id, DEFAULT_STRING);
-    }
-
-    Node(int id, String name) {
-        this(id, name, EMPTY_PARENT);
-    }
-
-    Node(int id, String name, Node parent) {
-        this(id, name, parent, EMPTY_CHILD);
-    }
-
-    Node(int id, String name, Node parent, ArrayList<Node> children) {
-        this.id = id;
-        this.name = name;
-        this.parent = parent;
-        this.children.addAll(children);
-    }
-
-    //Клонирование Node, без изменения parent
-    public Node clone() {
-        Node cloneNode = new Node(this.id);
-        cloneNode.name = this.name;
-        for (Node child : this.children
-        ) {
-            Node childClone = child.clone();
-            cloneNode.children.add(childClone);
-            childClone.parent = cloneNode;
-        }
-        return cloneNode;
-    }
-
-    public void parseToJSON(StringBuffer bf){
-//        StringBuffer bf = new StringBuffer();
-bf.append("{ \"NodeID\": \"");
-bf.append(id);
-bf.append("\", \"NodeName\": \"");
-bf.append(name);
-bf.append("\"");
-if(!children.isEmpty()){
-    bf.append(", \"children\": ");
-    for (Node child:children) {
-        child.parseToJSON(bf);
-    }
-}
-bf.append(" },");
-
-
-
-
-//        return bf.toString();
-    }
-
-//    public void addChild(Node child){
-//        child.children
-//        children.add(child);
-//    }
-
-//    public void parseFromJSON(String str){
-//
-//    }
-
-
-    @Override
-    public String toString() {
-//        return "Node{" +
-//                "id=" + id +
-//                ", parent=" + parent +
-//                ", children=" + children +
-//                ", name='" + name + '\'' +
-//                '}';
-
-        return "id: " + id + " Name: " + name;
-    }
-}
-
-
+/**
+ * Класс Дерева.
+ *
+ * @version 0.9
+ * @autor Евгений Барабанов
+ */
 public class Tree implements Serializable {
+    /** Поле id дерева */
     private int treeId = 0;
+
+    /** Поле названия дерева */
     private String treeName = "";
+
+    /** Поле MaxID для узлов */
     private int id = 1;
+
+    /** Поле Главного узла(Головы дерева) */
     private Node head;
+
+    /** Константа Главного узла */
     final static private Node START_TREE = new Node();
+
+    /** Константа id Главного узла */
     final static private int START_TREE_ID = 0;
 
+    /**
+     * Конструктор - создание нового объекта
+     * @see Tree#Tree()
+     */
     Tree() {
         this(START_TREE);
     }
 
+    /**
+     * Конструктор - создание нового объекта с определенными значениями
+     * @param name - название дерева
+     * @see Tree#Tree(String)
+     */
     Tree(String name) {
         this(new Node(START_TREE_ID, name));
     }
 
+    /**
+     * Конструктор - создание нового объекта с определенными значениями
+     * @param head - Главный узел дерева
+     * @see Tree#Tree(Node)
+     */
     Tree(Node head) {
         this.head = head;
     }
 
-//    Tree(Node head) {
-//        this.head = head;
-//    }
-
     //Получить голову
+    /**
+     * Функция получения значения поля {@link Tree#head}
+     * @return возвращает Главный узел
+     */
     public Node getHead() {
         return head;
     }
 
     //Получить noce по id среди детей
+    /**
+     * Функция поиска и получения Узла среди детей заданного узла
+     * @param id - id искомого узла
+     * @param node - id дерева
+     */
     private Node getNodeByIdInChildren(int id, Node node) {
         if (head.children != null) {
             for (int i = 0; i < node.children.size(); i++) {
@@ -138,31 +82,58 @@ public class Tree implements Serializable {
         return null;
     }
 
+    /**
+     * Функция получения значения поля {@link Tree#treeId}
+     * @return id дерева
+     */
     public int getTreeId() {
         return treeId;
     }
 
+    /**
+     * Функция получения значения поля {@link Tree#treeName}
+     * @return возвращает имя дерева
+     */
     public String getTreeName() {
         return treeName;
     }
 
+    /**
+     * Процедура определения id дерева {@link Tree#treeId}
+     * @param treeId - id дерева
+     */
     public void setTreeId(int treeId) {
         this.treeId = treeId;
     }
 
+    /**
+     * Процедура определения имя дерева {@link Tree#treeName}
+     * @param treeName - имя дерева
+     */
     public void setTreeName(String treeName) {
         this.treeName = treeName;
     }
 
+    /**
+     * Процедура определения maxId узлов дерева {@link Tree#id}
+     * @param maxId - maxId узлов дерева
+     */
     public void setMaxId(int maxId) {
         this.id = maxId;
     }
 
-    public int getMaxID(){
+    /**
+     * Функция получения значения поля {@link Tree#id}
+     * @return возвращает MaxID для узлов дерева
+     */
+    public int getMaxID() {
         return id;
     }
 
-    //Получить Node по id
+    /**
+     * Функция получения узла по его id
+     * @param id - id узла
+     */
     public Node getNodeById(int id) {
         if (head.id == id) {
             return head;
@@ -171,6 +142,10 @@ public class Tree implements Serializable {
         return subnode;
     }
 
+    /**
+     * Процедура изменения id у заданного узла
+     * @param node - узел
+     */
     private void changeId(Node node) {
         node.id = this.id;
         this.id++;
@@ -181,40 +156,40 @@ public class Tree implements Serializable {
         }
     }
 
-
-    //Добавить node к узлу с таким то id
-    //должен ли я заменять id у node при добавлении?
-    //изменить id детей
+    /**
+     * Процедура добавления узла к узлу с заданным id
+     * @param id - id узла, к которому необходимо добавить узел
+     * @param node - добавляемый узел
+     */
     public void addNodeById(int id, Node node) {
         Node parent = getNodeById(id);
         if (parent != null) {
-//            Node child = getNodeById(node.id);
-            //if(getNodeById(node.id) == null){
             node.parent = parent;
             changeId(node);
-//            node.id = this.id;
             parent.children.add(node);
-//            this.id++;
-            //}
         }
     }
 
-    //удаление node по id
+    /**
+     * Процедура удаления узла с заданным id
+     * @param id - id узла
+     */
     public void deleteNodeById(int id) {
         Node deletedNode = getNodeById(id);
         if (deletedNode != null) {
             Node parent = deletedNode.parent;
-//            int index = parent.children.indexOf(deletedNode);
             parent.children.remove(deletedNode);
         }
     }
 
-    //Расщепление дерева, по node id
+    /**
+     * Процедура расщепления узла с заданным id
+     * @param id - id узла
+     */
     public void splitTree(int id) {
         Node deletedNode = getNodeById(id);
         if (deletedNode != null) {
             Node parent = deletedNode.parent;
-//            int index = parent.children.indexOf(deletedNode);
             parent.children.remove(deletedNode);
             for (Node child : deletedNode.children) {
                 parent.children.add(child);
@@ -225,6 +200,7 @@ public class Tree implements Serializable {
 
     /**
      * Функция получения клона дерева
+     *
      * @return возвращает клонированное дерево
      */
     public Tree cloneTree() {
@@ -233,11 +209,18 @@ public class Tree implements Serializable {
         return tree;
     }
 
-    //удаление дерева
+    /**
+     * Процедура удаления дерева
+     */
     public void deleteTree() {
         head = null;
     }
 
+    /**
+     * Процедура записи в StringBuffer узла в формате JSON
+     * @param node - записываемый узел
+     * @param buffer - StringBuffer
+     */
     private void showNode(Node node, StringBuffer buffer) {
 
         System.out.print(buffer);
@@ -245,23 +228,35 @@ public class Tree implements Serializable {
         if (node.children.size() != 0) {
             buffer.append("\t");
             for (Node child : node.children
-            ) {
+                    ) {
                 showNode(child, buffer);
             }
             buffer.deleteCharAt(buffer.length() - 1);
         }
     }
 
+    /**
+     * Процедура записи в StringBuffer дерева в формате JSON
+     */
     public void showTree() {
-        System.out.println("TreeId = "+treeId+" TreeName = "+ treeName);
+        System.out.println("TreeId = " + treeId + " TreeName = " + treeName);
         StringBuffer buffer = new StringBuffer();
         showNode(head, buffer);
     }
 
+    /**
+     * Процедура создания нового узла
+     * @param id - id родительского узла
+     */
     public void newNode(int id) {
-        newNode(id,"");
+        newNode(id, "");
     }
 
+    /**
+     * Процедура создания нового узла
+     * @param id - id родительского узла
+     * @param name - имя нового узла
+     */
     public void newNode(int id, String name) {
         Node parent = getNodeById(id);
         if (parent != null) {
@@ -271,49 +266,31 @@ public class Tree implements Serializable {
         }
     }
 
-//    public void parseToJSON(StringBuffer bf){
-//        bf.append("{ \"TreeID\": \"");
-//        bf.append(treeId);
-//        bf.append("\", \"TreeName\": \"");
-//        bf.append(treeName);
-//        bf.append("\"");
-////        getHead().parseToJSON(bf);
-//        if(!(head == null)){
-//            bf.append(", \"Tree\": ");
-//            getHead().parseToJSON(bf);
-//        }
-//        bf.append(" },");
-//    }
-
-        public void parseToJSON(StringBuffer bf){
+    /**
+     * Процедура записи дерева в StringBuffer в форме JSON
+     * @param bf - StringBuffer
+     */
+    public void parseToJSON(StringBuffer bf) {
         bf.append("{ \"TreeID\": \"");
         bf.append(treeId);
         bf.append("\", \"TreeName\": \"");
         bf.append(treeName);
-            bf.append("\", \"TreeMaxID\": \"");
-            bf.append(id);
+        bf.append("\", \"TreeMaxID\": \"");
+        bf.append(id);
         bf.append("\"");
-//        getHead().parseToJSON(bf);
-        if(!(head == null)){
+        if (!(head == null)) {
             bf.append(", \"Tree\": ");
             getHead().parseToJSON(bf);
         }
         bf.append(" },");
     }
 
+    /**
+     * Процедура вывода значений о лсите деревьев
+     */
     @Override
     public String toString() {
-//        return "Tree{" +
-//                "treeId=" + treeId +
-//                ", treeName='" + treeName + '\'' +
-//                ", id=" + id +
-//                ", head=" + head +
-//                '}';
-
         return "ID: " + getTreeId() + " Name: " + treeName;
     }
 
-    //    public void parseFromJSON(StringBuffer bf){
-//
-//    }
 }

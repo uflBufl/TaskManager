@@ -1,4 +1,5 @@
-public enum Action{
+/** Поле списка команд клиента */
+public enum Action {
     CREATENODE,
     DELETENODE,
     LOAD,
