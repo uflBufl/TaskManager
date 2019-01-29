@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Класс Узла.
  *
  * @version 0.9
- * @autor Евгений Барабанов
+ * @author Евгений Барабанов
  */
 public class Node implements Serializable, Cloneable {
     /** Поле id узла */

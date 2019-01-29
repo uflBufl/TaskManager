@@ -9,7 +9,7 @@ import java.io.*;
  * Класс Главной формы.
  *
  * @version 0.9
- * @autor Евгений Барабанов
+ * @author Евгений Барабанов
  */
 public class MainForm extends JFrame {
     /** Поле деревьев */
@@ -43,8 +43,8 @@ public class MainForm extends JFrame {
 
     /**
      * Процедура создания дерева
-     * @param nodeName - Имя головы дерева
-     * @param treeName - Имя нового дерева
+     * @param nodeName - имя головы дерева
+     * @param treeName - имя нового дерева
      */
     public void createTree(String nodeName, String treeName) {
         this.client.createTree(nodeName, treeName);
@@ -77,7 +77,7 @@ public class MainForm extends JFrame {
 
     /**
      * Процедура создания узла к текущему узлу
-     * @param nodeName - Имя нового узла
+     * @param nodeName - имя нового узла
      */
     public void newNode(String nodeName) {
         if (trees.getTreeById(treeId) != null && nodeId != null && trees.getTreeById(treeId).getNodeById(Integer.parseInt(nodeId.getText())) != null) {

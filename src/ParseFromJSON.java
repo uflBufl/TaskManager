@@ -1,7 +1,7 @@
 /**
  * Класс методов ParseFromSJSON.
  * @version 0.9
- * @autor Евгений Барабанов
+ * @author Евгений Барабанов
  */
 public class ParseFromJSON {
 

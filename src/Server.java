@@ -14,7 +14,7 @@ import java.util.Random;
  * Класс сервера, соединяющего все клиенты.
  *
  * @version 0.9
- * @autor Евгений Барабанов
+ * @author Евгений Барабанов
  */
 public class Server implements Runnable {
     /** Поле сокет */
@@ -43,6 +43,8 @@ public class Server implements Runnable {
 
     /**
      * Процедура старта сервера и ожидание клиентов
+     * @param args - параметры в виде строки
+     * @throws IOException если произошла неизвестная ошибка
      */
     public static void main(String[] args) throws IOException {
         System.out.println("Server: Start");
@@ -64,6 +66,7 @@ public class Server implements Runnable {
             e.printStackTrace();
             System.out.println(e.getMessage());
             System.out.println("Server: FIN!");
+            throw e;
         }
     }
 

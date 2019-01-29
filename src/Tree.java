@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Класс Дерева.
  *
  * @version 0.9
- * @autor Евгений Барабанов
+ * @author Евгений Барабанов
  */
 public class Tree implements Serializable {
     /** Поле id дерева */
@@ -133,6 +133,7 @@ public class Tree implements Serializable {
     /**
      * Функция получения узла по его id
      * @param id - id узла
+     * @return узел
      */
     public Node getNodeById(int id) {
         if (head.id == id) {
